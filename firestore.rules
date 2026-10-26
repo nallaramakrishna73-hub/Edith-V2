@@ -1,0 +1,117 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Global Safety Net: default deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Helper functions
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    // Entity Validators
+    function isValidConversation(data) {
+      return data.keys().hasAll(['id', 'userId', 'title']) &&
+        data.keys().hasOnly(['id', 'userId', 'title', 'createdAt', 'updatedAt']) &&
+        data.id is string && isValidId(data.id) &&
+        data.userId == request.auth.uid &&
+        data.title is string && data.title.size() <= 100;
+    }
+
+    function isValidMessage(data) {
+      return data.keys().hasAll(['id', 'conversationId', 'userId', 'role', 'content']) &&
+        data.keys().hasOnly(['id', 'conversationId', 'userId', 'role', 'content', 'source', 'createdAt']) &&
+        data.id is string && isValidId(data.id) &&
+        data.conversationId is string && isValidId(data.conversationId) &&
+        data.userId == request.auth.uid &&
+        data.role in ['user', 'assistant', 'system'] &&
+        data.content is string && data.content.size() <= 10000;
+    }
+
+    function isValidTask(data) {
+      return data.keys().hasAll(['id', 'userId', 'name', 'category', 'status']) &&
+        data.keys().hasOnly(['id', 'userId', 'name', 'category', 'status', 'progress', 'pid', 'description', 'createdAt']) &&
+        data.id is string && isValidId(data.id) &&
+        data.userId == request.auth.uid &&
+        data.name is string && data.name.size() <= 150 &&
+        data.category in ['RECON', 'SYSTEM', 'CODE', 'ANALYSIS', 'WORKFLOW', 'AUTOMATION'] &&
+        data.status in ['PENDING', 'RUNNING', 'PAUSED', 'COMPLETED', 'FAILED', 'CANCELLED'];
+    }
+
+    function isValidKaliCommand(data) {
+      return data.keys().hasAll(['id', 'userId', 'command', 'status']) &&
+        data.keys().hasOnly(['id', 'userId', 'command', 'status', 'output', 'createdAt']) &&
+        data.id is string && isValidId(data.id) &&
+        data.userId == request.auth.uid &&
+        data.command is string && data.command.size() <= 1000 &&
+        data.status in ['QUEUED', 'RUNNING', 'COMPLETED', 'FAILED'];
+    }
+
+    // Conversations collection
+    match /conversations/{conversationId} {
+      allow get: if isSignedIn() && (existing().userId == request.auth.uid);
+      allow list: if isSignedIn() && (resource.data.userId == request.auth.uid);
+      allow create: if isSignedIn() && isValidId(conversationId) && isValidConversation(incoming());
+      allow update: if isSignedIn() && isValidId(conversationId) &&
+        existing().userId == request.auth.uid &&
+        incoming().userId == existing().userId &&
+        isValidConversation(incoming());
+      allow delete: if isSignedIn() && existing().userId == request.auth.uid;
+
+      // Messages subcollection
+      match /messages/{messageId} {
+        allow get: if isSignedIn() && (existing().userId == request.auth.uid);
+        allow list: if isSignedIn() && (resource.data.userId == request.auth.uid);
+        allow create: if isSignedIn() && isValidId(messageId) && isValidMessage(incoming());
+        allow update: if isSignedIn() && isValidId(messageId) &&
+          existing().userId == request.auth.uid &&
+          incoming().userId == existing().userId &&
+          isValidMessage(incoming());
+        allow delete: if isSignedIn() && existing().userId == request.auth.uid;
+      }
+    }
+
+    // Tasks collection
+    match /tasks/{taskId} {
+      allow get: if isSignedIn() && (existing().userId == request.auth.uid);
+      allow list: if isSignedIn() && (resource.data.userId == request.auth.uid);
+      allow create: if isSignedIn() && isValidId(taskId) && isValidTask(incoming());
+      allow update: if isSignedIn() && isValidId(taskId) &&
+        existing().userId == request.auth.uid &&
+        incoming().userId == existing().userId &&
+        isValidTask(incoming());
+      allow delete: if isSignedIn() && existing().userId == request.auth.uid;
+    }
+
+    // Kali Commands collection
+    match /kali_commands/{commandId} {
+      allow get: if isSignedIn() && (existing().userId == request.auth.uid);
+      allow list: if isSignedIn() && (resource.data.userId == request.auth.uid);
+      allow create: if isSignedIn() && isValidId(commandId) && isValidKaliCommand(incoming());
+      allow update: if isSignedIn() && isValidId(commandId) &&
+        existing().userId == request.auth.uid &&
+        incoming().userId == existing().userId &&
+        isValidKaliCommand(incoming());
+      allow delete: if isSignedIn() && existing().userId == request.auth.uid;
+    }
+  }
+}

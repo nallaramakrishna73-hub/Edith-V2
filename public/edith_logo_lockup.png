@@ -1,0 +1,105 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 400" width="100%" height="100%">
+  <defs>
+    <!-- Background Radial Glow -->
+    <radialGradient id="lockupGlow" cx="20%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#00E5FF" stop-opacity="0.14" />
+      <stop offset="60%" stop-color="#0A1128" stop-opacity="0.04" />
+      <stop offset="100%" stop-color="#05080F" stop-opacity="0" />
+    </radialGradient>
+
+    <filter id="lockupCyanGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="5" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+
+    <filter id="lockupIntenseGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="8" result="blur1" />
+      <feGaussianBlur stdDeviation="3" result="blur2" />
+      <feMerge>
+        <feMergeNode in="blur1" />
+        <feMergeNode in="blur2" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background tile -->
+  <rect width="1200" height="400" fill="#05080F" />
+  <rect width="1200" height="400" fill="url(#lockupGlow)" />
+
+  <!-- Orb Group placed on left at (220, 200) -->
+  <g transform="translate(-36, 0)">
+    <!-- 4 Cardinal Crosshairs -->
+    <line x1="256" y1="84" x2="256" y2="100" stroke="#00E5FF" stroke-width="3" stroke-linecap="round" filter="url(#lockupCyanGlow)" />
+    <line x1="256" y1="300" x2="256" y2="316" stroke="#00E5FF" stroke-width="3" stroke-linecap="round" filter="url(#lockupCyanGlow)" />
+    <line x1="140" y1="200" x2="156" y2="200" stroke="#00E5FF" stroke-width="3" stroke-linecap="round" filter="url(#lockupCyanGlow)" />
+    <line x1="356" y1="200" x2="372" y2="200" stroke="#00E5FF" stroke-width="3" stroke-linecap="round" filter="url(#lockupCyanGlow)" />
+
+    <!-- Dial Ticks -->
+    <g stroke="#00E5FF" stroke-opacity="0.4" stroke-width="1.5">
+      <line x1="256" y1="104" x2="256" y2="110" transform="rotate(15 256 200)" />
+      <line x1="256" y1="104" x2="256" y2="112" transform="rotate(30 256 200)" stroke-opacity="0.8" />
+      <line x1="256" y1="104" x2="256" y2="110" transform="rotate(45 256 200)" />
+      <line x1="256" y1="104" x2="256" y2="112" transform="rotate(60 256 200)" stroke-opacity="0.8" />
+      <line x1="256" y1="104" x2="256" y2="110" transform="rotate(75 256 200)" />
+      <line x1="256" y1="104" x2="256" y2="110" transform="rotate(105 256 200)" />
+      <line x1="256" y1="104" x2="256" y2="112" transform="rotate(120 256 200)" stroke-opacity="0.8" />
+      <line x1="256" y1="104" x2="256" y2="110" transform="rotate(135 256 200)" />
+      <line x1="256" y1="104" x2="256" y2="112" transform="rotate(150 256 200)" stroke-opacity="0.8" />
+      <line x1="256" y1="104" x2="256" y2="110" transform="rotate(165 256 200)" />
+      <line x1="256" y1="104" x2="256" y2="110" transform="rotate(195 256 200)" />
+      <line x1="256" y1="104" x2="256" y2="112" transform="rotate(210 256 200)" stroke-opacity="0.8" />
+      <line x1="256" y1="104" x2="256" y2="110" transform="rotate(225 256 200)" />
+      <line x1="256" y1="104" x2="256" y2="112" transform="rotate(240 256 200)" stroke-opacity="0.8" />
+      <line x1="256" y1="104" x2="256" y2="110" transform="rotate(255 256 200)" />
+      <line x1="256" y1="104" x2="256" y2="110" transform="rotate(285 256 200)" />
+      <line x1="256" y1="104" x2="256" y2="112" transform="rotate(300 256 200)" stroke-opacity="0.8" />
+      <line x1="256" y1="104" x2="256" y2="110" transform="rotate(315 256 200)" />
+      <line x1="256" y1="104" x2="256" y2="112" transform="rotate(330 256 200)" stroke-opacity="0.8" />
+      <line x1="256" y1="104" x2="256" y2="110" transform="rotate(345 256 200)" />
+    </g>
+
+    <!-- Outer Precision Ring -->
+    <circle cx="256" cy="200" r="92" fill="none" stroke="#00E5FF" stroke-width="3" filter="url(#lockupCyanGlow)" />
+
+    <!-- Dotted Orbit Ring -->
+    <circle cx="256" cy="200" r="82" fill="none" stroke="#2F6BFF" stroke-width="2" stroke-dasharray="3 6" stroke-opacity="0.8" />
+    <circle cx="314" cy="142" r="3.5" fill="#00E5FF" filter="url(#lockupCyanGlow)" />
+    <circle cx="198" cy="258" r="3.5" fill="#2F6BFF" filter="url(#lockupCyanGlow)" />
+
+    <!-- Tactical Arcs -->
+    <path d="M 194 235 A 70 70 0 0 1 194 165" fill="none" stroke="#2F6BFF" stroke-width="5" stroke-linecap="round" filter="url(#lockupCyanGlow)" />
+    <circle cx="180" cy="230" r="4.5" fill="#2F6BFF" />
+    <circle cx="180" cy="230" r="2" fill="#05080F" />
+
+    <path d="M 245 130 A 70 70 0 0 1 319 180" fill="none" stroke="#00E5FF" stroke-width="5" stroke-linecap="round" filter="url(#lockupIntenseGlow)" />
+    <circle cx="320" cy="150" r="5.5" fill="#00E5FF" filter="url(#lockupIntenseGlow)" />
+    <circle cx="320" cy="150" r="2.5" fill="#05080F" />
+
+    <path d="M 320 220 A 70 70 0 0 1 240 268" fill="none" stroke="#00E5FF" stroke-width="4" stroke-linecap="round" filter="url(#lockupCyanGlow)" />
+    <circle cx="310" cy="260" r="4.5" fill="#00E5FF" />
+    <circle cx="310" cy="260" r="2" fill="#05080F" />
+
+    <!-- Core with E -->
+    <circle cx="256" cy="200" r="52" fill="#0A1128" stroke="#00E5FF" stroke-width="2" stroke-opacity="0.7" />
+    <circle cx="256" cy="200" r="44" fill="#060C1B" stroke="#00E5FF" stroke-width="1" stroke-opacity="0.3" />
+
+    <g transform="translate(256 200) scale(0.6)" filter="url(#lockupIntenseGlow)">
+      <path d="M 24 -40 L -20 -40 C -26 -40 -30 -36 -30 -30 L -30 30 C -30 36 -26 40 -20 40 L 24 40 C 27 40 29 37 29 34 L 29 26 C 29 23 27 21 24 21 L -10 21 L -10 9 L 18 9 C 21 9 23 7 23 4 L 23 -4 C 23 -7 21 -9 18 -9 L -10 -9 L -10 -21 L 24 -21 C 27 -21 29 -23 29 -26 L 29 -34 C 29 -37 27 -40 24 -40 Z" fill="#A5F3FC" />
+    </g>
+  </g>
+
+  <!-- Typography Right Column -->
+  <!-- "E D I T H" -->
+  <text x="440" y="215" font-family="'Orbitron', 'Rajdhani', sans-serif" font-weight="900" font-size="94" fill="#FFFFFF" letter-spacing="14">EDITH</text>
+
+  <!-- "A I    O S" + Tactical Horizontal Rule -->
+  <text x="442" y="280" font-family="'Orbitron', 'Rajdhani', sans-serif" font-weight="800" font-size="34" fill="#00E5FF" letter-spacing="12">AI   OS</text>
+  <line x1="680" y1="270" x2="980" y2="270" stroke="#00E5FF" stroke-width="3" stroke-linecap="round" filter="url(#lockupCyanGlow)" />
+
+  <!-- Subtitle -->
+  <text x="444" y="325" font-family="'Inter', sans-serif" font-weight="400" font-size="19" fill="#8FA3BF" letter-spacing="1.2">Enhanced Digital Intelligence &amp; Tactical Helper</text>
+</svg>

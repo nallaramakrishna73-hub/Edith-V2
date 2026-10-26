@@ -1,0 +1,81 @@
+{
+  "entities": {
+    "Conversation": {
+      "title": "Conversation",
+      "description": "Tactical session metadata for EDITH AI OS chats",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Unique UUID of conversation" },
+        "userId": { "type": "string", "description": "Owner user UID" },
+        "title": { "type": "string", "maxLength": 100, "description": "Session title" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Creation timestamp" },
+        "updatedAt": { "type": "string", "format": "date-time", "description": "Last update timestamp" }
+      },
+      "required": ["id", "userId", "title"]
+    },
+    "Message": {
+      "title": "Message",
+      "description": "Individual message in a tactical chat session",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Unique message ID" },
+        "conversationId": { "type": "string", "description": "Parent conversation ID" },
+        "userId": { "type": "string", "description": "Author user UID" },
+        "role": { "type": "string", "enum": ["user", "assistant", "system"], "description": "Message role" },
+        "content": { "type": "string", "maxLength": 10000, "description": "Message content" },
+        "source": { "type": "string", "enum": ["voice", "text", "terminal"], "description": "Input source" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Creation timestamp" }
+      },
+      "required": ["id", "conversationId", "userId", "role", "content"]
+    },
+    "OSTask": {
+      "title": "OSTask",
+      "description": "Background multi-task process record",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Task identifier" },
+        "userId": { "type": "string", "description": "Task creator UID" },
+        "name": { "type": "string", "maxLength": 150, "description": "Task name" },
+        "category": { "type": "string", "enum": ["RECON", "SYSTEM", "CODE", "ANALYSIS", "WORKFLOW", "AUTOMATION"], "description": "Task category" },
+        "status": { "type": "string", "enum": ["PENDING", "RUNNING", "PAUSED", "COMPLETED", "FAILED", "CANCELLED"], "description": "Current status" },
+        "progress": { "type": "number", "description": "Task progress 0-100" },
+        "pid": { "type": "number", "description": "Process PID" },
+        "description": { "type": "string", "maxLength": 500, "description": "Task details" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Creation timestamp" }
+      },
+      "required": ["id", "userId", "name", "category", "status"]
+    },
+    "KaliCommand": {
+      "title": "KaliCommand",
+      "description": "Execution command dispatched to Kali Linux bridge agent",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Command UUID" },
+        "userId": { "type": "string", "description": "Commander user UID" },
+        "command": { "type": "string", "maxLength": 1000, "description": "Command string to run" },
+        "status": { "type": "string", "enum": ["QUEUED", "RUNNING", "COMPLETED", "FAILED"], "description": "Status" },
+        "output": { "type": "string", "maxLength": 20000, "description": "Command output" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Creation timestamp" }
+      },
+      "required": ["id", "userId", "command", "status"]
+    }
+  },
+  "firestore": {
+    "/conversations/{conversationId}": {
+      "schema": "#/entities/Conversation",
+      "description": "User conversation sessions"
+    },
+    "/conversations/{conversationId}/messages/{messageId}": {
+      "schema": "#/entities/Message",
+      "description": "Messages within a conversation session"
+    },
+    "/tasks/{taskId}": {
+      "schema": "#/entities/OSTask",
+      "description": "Concurrent OS background processes"
+    },
+    "/kali_commands/{commandId}": {
+      "schema": "#/entities/KaliCommand",
+      "description": "Kali Linux bridge execution queue"
+    }
+  }
+}

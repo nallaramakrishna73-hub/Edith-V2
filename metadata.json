@@ -1,0 +1,7 @@
+{
+  "name": "EDITH AI OS",
+  "description": "Enhanced Digital Intelligence & Tactical Helper - Autonomous AI Operating System with instant vocal agent boot, multi-task process scheduling, cyber terminal, and workspace file vault.",
+  "requestFramePermissions": ["MICROPHONE"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
+
